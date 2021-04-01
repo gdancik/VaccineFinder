@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import requests
 
 import smtplib
@@ -98,6 +99,35 @@ def check_availability(myzip, skips) :
     
     return vaxfinder(now, skips, msg)
     
+def check_cvs() :
+    """Checks vaccine availability from CVS in CT
+       Returns a vaxfinder object
+    """
+
+    # the value of "User-Agent" should be set appropriately
+    headers = {"User-Agent": "VinnyVaccineFinder/1.0"}
+    myurl = 'https://www.cvs.com/immunizations/covid-19-vaccine'
+    #page = requests.get(myurl, headers, timeout=None)
+
+    driver = webdriver.Firefox()
+    driver.get(myurl)
+    
+    a=driver.find_elements_by_xpath('//a[@data-analytics-name="Connecticut"]')
+    a[0].click()
+    
+    now = time.time()
+
+    div = driver.find_elements_by_class_name('modal__inner')[2]
+
+    p = div.find_elements_by_tag_name('p')
+
+    msg = p[4].text + ' ' + p[3].text
+
+    driver.close()
+    return vaxfinder(now, None, msg)
+   
+
+
 
 def send_msg(sender, receiver, msg, password) :
     """ Sends an sms message from 'sender' to 'receiver' from the gmail sender account """

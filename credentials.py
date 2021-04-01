@@ -1,3 +1,3 @@
-sender = 'email@gmail.com' 
-to = '1234567890@txt.att.net'
-password = 'password'
+sender = 'garrett.dancik@gmail.com' 
+to = '3183329371@txt.att.net'
+password = 'm1stycat4'
